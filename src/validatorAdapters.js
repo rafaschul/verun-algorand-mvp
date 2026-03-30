@@ -82,40 +82,21 @@ async function goPlausibleVote(validator, agentId, score, operation) {
 // Full AML scoring requires Noah API key (account manager).
 // In testnet mode: simulates AML check based on score thresholds.
 async function noahVote(validator, agentId, score, operation) {
-  try {
-    // Test connectivity to Noah sandbox
-    const res = await fetch('https://api-sandbox.noah.com/health', {
-      signal: AbortSignal.timeout(5000)
-    });
+  // Noah sandbox requires API key (contact docs.noah.com for access).
+  // Testnet mode: simulate AML scoring based on score thresholds.
+  let vote, reason;
+  if (score >= 800)      { vote = 'LOW';   reason = 'aml_clear_simulated'; }
+  else if (score >= 500) { vote = 'MED';   reason = 'aml_review_simulated'; }
+  else if (score >= 300) { vote = 'HIGH';  reason = 'aml_flag_simulated'; }
+  else                   { vote = 'BLOCK'; reason = 'aml_block_simulated'; }
 
-    const reachable = res.ok || res.status === 401; // 401 = reachable but needs auth
-
-    // Simulate AML scoring (full scoring requires Noah API key)
-    let vote, reason;
-    if (score >= 800)      { vote = 'LOW';   reason = 'aml_clear_simulated'; }
-    else if (score >= 500) { vote = 'MED';   reason = 'aml_review_simulated'; }
-    else if (score >= 300) { vote = 'HIGH';  reason = 'aml_flag_simulated'; }
-    else                   { vote = 'BLOCK'; reason = 'aml_block_simulated'; }
-
-    return {
-      vote,
-      reason,
-      source: 'noah_sandbox',
-      status: 'testnet_simulated',
-      reachable,
-      note: 'Full AML scoring requires Noah API key — contact docs.noah.com'
-    };
-  } catch (e) {
-    // Noah sandbox unreachable — fallback to score-based vote
-    const req = { read: 300, transfer: 500, mint: 500, order: 600 };
-    const permitted = score >= (req[operation] ?? 300);
-    return {
-      vote: permitted ? (score >= 600 ? 'MED' : 'HIGH') : 'BLOCK',
-      reason: `noah_unreachable_fallback: ${e.message}`,
-      source: 'noah_sandbox',
-      status: 'fallback'
-    };
-  }
+  return {
+    vote,
+    reason,
+    source: 'noah_sandbox',
+    status: 'testnet_simulated',
+    note: 'Full AML scoring requires Noah API key — contact docs.noah.com'
+  };
 }
 
 // ─── tokenforge adapter ───────────────────────────────────────────────────────
