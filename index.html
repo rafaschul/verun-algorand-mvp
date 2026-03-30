@@ -458,33 +458,6 @@ footer{background:var(--card);border-top:1px solid var(--border);padding:36px 0}
     <h2 class="section-h2">Built for European regulation.</h2>
     <p class="section-sub">Every Verun feature maps directly to a MiCA requirement. CASPs get compliance by default, not as an afterthought.</p>
 
-    <div class="mica-grid">
-      <div class="mica-card">
-        <div class="mica-art">MiCA Art. 68</div>
-        <h4>CASP Authorisation & Agent Verification</h4>
-        <p>CASPs must verify all entities using their platform. Verun's KYA score provides a machine-readable, auditable identity record for every AI agent before access is granted.</p>
-        <div class="mica-feature">✓ KYA Score · On-Chain Identity</div>
-      </div>
-      <div class="mica-card">
-        <div class="mica-art">MiCA Art. 72</div>
-        <h4>AML/CFT Obligations</h4>
-        <p>Verun's 2-of-3 validator consensus acts as a distributed AML screening layer. Agents with scores below threshold are automatically blocked — no manual intervention required.</p>
-        <div class="mica-feature">✓ Validator Consensus · Auto-BLOCK</div>
-      </div>
-      <div class="mica-card">
-        <div class="mica-art">MiCA Art. 75</div>
-        <h4>Record-Keeping & Audit Trail</h4>
-        <p>Every KYA evaluation is anchored on Algorand via ARC-4 smart contracts. Immutable, timestamped, and retrievable by regulators at any time. ~3.6s settlement.</p>
-        <div class="mica-feature">✓ Algorand ARC-4 · Immutable Log</div>
-      </div>
-      <div class="mica-card">
-        <div class="mica-art">FATF Travel Rule</div>
-        <h4>Agent Transfer Monitoring</h4>
-        <p>Agent-initiated transfers above threshold are flagged for additional verification. Verun's operation scoring differentiates between read, transfer, mint, and order operations.</p>
-        <div class="mica-feature">✓ Operation-Level Scoring</div>
-      </div>
-    </div>
-
     <div class="mica-table-wrap">
       <table class="mica-table">
         <thead>
@@ -561,23 +534,6 @@ footer{background:var(--card);border-top:1px solid var(--border);padding:36px 0}
     <div class="section-label">Validator Network</div>
     <h2 class="section-h2">2-of-3 Consensus. Decentralised.</h2>
     <p class="section-sub">Three independent validators vote on each agent's compliance tier. No single point of failure. No single point of censorship.</p>
-    <div class="val-grid">
-      <div class="val-card">
-        <div class="val-header"><div class="val-name">Val-EU-01</div><span class="val-tag">Active</span></div>
-        <div class="val-sub">EU-regulated compliance node. Enforces MiCA Art. 68 + FATF Travel Rule thresholds by default.</div>
-        <div class="val-meta">consensus: score_based_policy · votes: 2,841</div>
-      </div>
-      <div class="val-card">
-        <div class="val-header"><div class="val-name">Val-Neutral-02</div><span class="val-tag">Active</span></div>
-        <div class="val-sub">Jurisdiction-neutral node. Applies risk-based scoring with AML/CFT cross-reference checks.</div>
-        <div class="val-meta">consensus: risk_based · votes: 2,719</div>
-      </div>
-      <div class="val-card val-open">
-        <div class="val-header"><div class="val-name">Open Slot</div><span style="font-size:9px;color:var(--text3);border:1px dashed var(--border);padding:2px 7px;border-radius:4px">Apply</span></div>
-        <div class="val-sub" style="color:var(--text3)">Third validator slot open for institutional compliance partners. Earn fee share on every evaluation.</div>
-        <div class="val-meta">fee share: 10% per evaluation</div>
-      </div>
-    </div>
   </div>
 </section>
 
