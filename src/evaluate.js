@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const { callValidator } = require('./validatorAdapters');
 
-const validators = JSON.parse(fs.readFileSync(path.join(__dirname, 'validators.json'), 'utf8'));
+const ALL_VALIDATORS = JSON.parse(fs.readFileSync(path.join(__dirname, 'validators.json'), 'utf8'));
 
 function scoreToTier(score) {
   if (score >= 800) return 'LOW';
@@ -21,22 +22,55 @@ function kickbackRate(score) {
   return 0;
 }
 
-function validatorVote(validatorId, score, operation) {
-  const permitted = permittedByOperation(score, operation);
-  if (!permitted) return { validatorId, vote: 'BLOCK', reason: 'threshold_not_met' };
-  return { validatorId, vote: scoreToTier(score), reason: 'score_based_policy' };
-}
+/**
+ * evaluateAgent
+ * @param {string} agentId
+ * @param {number} score
+ * @param {string} operation - read | transfer | mint | order
+ * @param {string[]} validatorIds - optional subset of validator IDs to use (min 2 for consensus)
+ */
+async function evaluateAgent({ agentId, score, operation = 'read', validatorIds = null }) {
+  // Select validators — default: first two internal ones (fast, no external calls)
+  let selected;
+  if (validatorIds && validatorIds.length >= 2) {
+    selected = ALL_VALIDATORS.filter(v => validatorIds.includes(v.id));
+  } else {
+    // Default: both internal validators only
+    selected = ALL_VALIDATORS.filter(v => v.type === 'internal');
+  }
 
-function evaluateAgent({ agentId, score, operation = 'read' }) {
-  const votes = validators.map(v => validatorVote(v.id, score, operation));
-  const tally = votes.reduce((acc, v) => {
-    acc[v.vote] = (acc[v.vote] || 0) + 1;
+  if (selected.length < 2) {
+    selected = ALL_VALIDATORS.filter(v => v.type === 'internal');
+  }
+
+  // Call all selected validators in parallel
+  const results = await Promise.all(
+    selected.map(async v => {
+      const result = await callValidator(v, agentId, score, operation);
+      return {
+        validatorId: v.id,
+        validatorName: v.name,
+        type: v.type,
+        status: v.status,
+        ...result
+      };
+    })
+  );
+
+  // Filter out UNAVAILABLE votes for consensus
+  const validVotes = results.filter(r => r.vote !== 'UNAVAILABLE');
+
+  // Tally
+  const tally = validVotes.reduce((acc, r) => {
+    acc[r.vote] = (acc[r.vote] || 0) + 1;
     return acc;
   }, {});
 
+  // 2-of-N consensus
+  const required = Math.ceil(selected.length / 2);
   let consensus = 'BLOCK';
   for (const t of ['LOW', 'MED', 'HIGH', 'BLOCK']) {
-    if ((tally[t] || 0) >= 2) {
+    if ((tally[t] || 0) >= required) {
       consensus = t;
       break;
     }
@@ -46,7 +80,8 @@ function evaluateAgent({ agentId, score, operation = 'read' }) {
     agentId,
     score,
     operation,
-    votes,
+    validators_used: selected.map(v => ({ id: v.id, name: v.name, type: v.type, status: v.status })),
+    votes: results,
     tally,
     consensus,
     permitted: consensus !== 'BLOCK',
@@ -55,8 +90,22 @@ function evaluateAgent({ agentId, score, operation = 'read' }) {
   };
 }
 
-if (require.main === module) {
-  console.log(JSON.stringify(evaluateAgent({ agentId: 'agent-demo', score: 820, operation: 'transfer' }), null, 2));
+// List all available validators (for the /api/validators endpoint)
+function listValidators() {
+  return ALL_VALIDATORS.map(v => ({
+    id: v.id,
+    name: v.name,
+    type: v.type,
+    description: v.description,
+    status: v.status,
+    policy: v.policy,
+    api: v.api ? { type: v.api.type, network: v.api.network, docs: v.api.docs } : null
+  }));
 }
 
-module.exports = { evaluateAgent, scoreToTier, permittedByOperation, kickbackRate };
+if (require.main === module) {
+  evaluateAgent({ agentId: 'agent-demo', score: 820, operation: 'transfer' })
+    .then(r => console.log(JSON.stringify(r, null, 2)));
+}
+
+module.exports = { evaluateAgent, scoreToTier, permittedByOperation, kickbackRate, listValidators };

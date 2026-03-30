@@ -1,5 +1,67 @@
 [
-  { "id": "validator-1", "name": "Verun Validator 1", "weight": 1 },
-  { "id": "validator-2", "name": "Verun Validator 2", "weight": 1 },
-  { "id": "validator-3", "name": "Verun Validator 3", "weight": 1 }
+  {
+    "id": "val-verun-eu-01",
+    "name": "Verun EU-01",
+    "type": "internal",
+    "description": "Verun internal EU compliance node. Enforces MiCA Art. 68 + FATF thresholds.",
+    "status": "active",
+    "policy": "score_based",
+    "weight": 1,
+    "api": null
+  },
+  {
+    "id": "val-verun-neutral-02",
+    "name": "Verun Neutral-02",
+    "type": "internal",
+    "description": "Verun internal jurisdiction-neutral node. Risk-based scoring with AML cross-reference.",
+    "status": "active",
+    "policy": "score_based",
+    "weight": 1,
+    "api": null
+  },
+  {
+    "id": "val-goplausible-03",
+    "name": "GoPlausible",
+    "type": "external",
+    "description": "W3C DID + Verifiable Credentials validator on Algorand. x402 Facilitator. Identity-based scoring.",
+    "status": "testnet",
+    "policy": "did_vc_based",
+    "weight": 1,
+    "api": {
+      "type": "mcp",
+      "endpoint": "https://algorand-mcp.goplausible.xyz",
+      "network": "testnet",
+      "docs": "https://github.com/GoPlausible/algorand-mcp"
+    }
+  },
+  {
+    "id": "val-noah-04",
+    "name": "Noah",
+    "type": "external",
+    "description": "VASP-licensed payment compliance node. EU + US licensed. AML/CFT scoring via Global Payouts API.",
+    "status": "testnet",
+    "policy": "aml_payment_based",
+    "weight": 1,
+    "api": {
+      "type": "rest",
+      "endpoint": "https://api-sandbox.noah.com",
+      "network": "testnet",
+      "docs": "https://docs.noah.com"
+    }
+  },
+  {
+    "id": "val-tokenforge-05",
+    "name": "tokenforge",
+    "type": "external",
+    "description": "Founding Validator. eWpG-compliant German Security Token platform. Chain API gate for Mint/Transfer/Order.",
+    "status": "founding",
+    "policy": "chain_api_based",
+    "weight": 1,
+    "api": {
+      "type": "rest",
+      "endpoint": "https://api.tokensuite.io",
+      "network": "testnet",
+      "docs": "https://docs.tokenforge.io"
+    }
+  }
 ]
