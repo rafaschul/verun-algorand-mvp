@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verun Protocol — MiCA-Compliant AI Agent Infrastructure · Algorand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07111F;
+  --bg2: #0D1B2E;
+  --card: #0F2035;
+  --card2: #132540;
+  --teal: #00D4AA;
+  --teal-dim: rgba(0,212,170,0.12);
+  --teal-border: rgba(0,212,170,0.25);
+  --purple: #7B61FF;
+  --purple-dim: rgba(123,97,255,0.12);
+  --purple-border: rgba(123,97,255,0.3);
+  --green: #00C986;
+  --green-dim: rgba(0,201,134,0.1);
+  --red: #FF4D6A;
+  --red-dim: rgba(255,77,106,0.1);
+  --amber: #FFB020;
+  --amber-dim: rgba(255,176,32,0.1);
+  --blue: #3B82F6;
+  --text: #F0F4FF;
+  --text2: #8BA3BE;
+  --text3: #4A6580;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(0,212,170,0.15);
+  --shadow: 0 2px 16px rgba(0,0,0,0.4);
+  --shadow-teal: 0 0 32px rgba(0,212,170,0.08);
+  --radius: 14px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Inter', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;overflow-x:hidden}
+a{color:var(--teal);text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.section{padding:88px 0}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(7,17,31,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;color:var(--text)}
+.nav-logo .kya{font-size:9px;font-weight:800;background:var(--teal);color:#07111F;padding:2px 7px;border-radius:4px;letter-spacing:0.08em}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:13px;font-weight:500;color:var(--text2);transition:color 0.2s}
+.nav-links a:hover{color:var(--teal)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.algo-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--teal);background:var(--teal-dim);border:1px solid var(--teal-border);padding:4px 12px;border-radius:20px;font-family:var(--mono)}
+.algo-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse-teal 2s infinite}
+@keyframes pulse-teal{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.5)}}
+
+/* HERO */
+.hero{padding:100px 0 80px;position:relative;overflow:hidden}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,170,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,170,0.04) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black,transparent)}
+.hero-glow{position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(0,212,170,0.07) 0%,transparent 70%);pointer-events:none}
+.hero-inner{position:relative;text-align:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;background:var(--teal-dim);border:1px solid var(--teal-border);padding:5px 14px;border-radius:20px}
+.hero h1{font-size:clamp(38px,5.5vw,68px);font-weight:800;line-height:1.08;color:var(--text);margin-bottom:24px;letter-spacing:-0.02em}
+.hero h1 .line2{color:var(--teal)}
+.hero-sub{font-size:17px;color:var(--text2);max-width:580px;margin:0 auto 36px;line-height:1.75}
+.hero-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:40px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;letter-spacing:0.05em;border:1px solid var(--border)}
+.pill-teal{background:var(--teal-dim);color:var(--teal);border-color:var(--teal-border)}
+.pill-purple{background:var(--purple-dim);color:var(--purple);border-color:var(--purple-border)}
+.pill-green{background:var(--green-dim);color:var(--green);border-color:rgba(0,201,134,0.25)}
+.pill-amber{background:var(--amber-dim);color:var(--amber);border-color:rgba(255,176,32,0.25)}
+.hero-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;border:none;border-radius:10px;padding:13px 28px;transition:all 0.2s}
+.btn-teal{background:var(--teal);color:#07111F}
+.btn-teal:hover{background:#00f0c4;box-shadow:0 0 24px rgba(0,212,170,0.4);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--teal);border:1.5px solid var(--teal-border)}
+.btn-outline:hover{background:var(--teal-dim);border-color:var(--teal)}
+
+/* PROBLEM / SOLUTION */
+.prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px}
+.prob-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.prob-card.problem{border-color:rgba(255,77,106,0.25)}
+.prob-card.solution{border-color:var(--teal-border)}
+.prob-tag{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:4px}
+.prob-tag.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(255,77,106,0.2)}
+.prob-tag.teal{color:var(--teal);background:var(--teal-dim);border:1px solid var(--teal-border)}
+.prob-card h3{font-size:18px;font-weight:700;color:var(--text);margin-bottom:10px}
+.prob-card p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+.flow-row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.flow-node{flex:1;text-align:center;padding:10px 6px;border-radius:8px;border:1px solid var(--border)}
+.flow-node.bad{background:rgba(255,77,106,0.05);border-color:rgba(255,77,106,0.2)}
+.flow-node.good{background:rgba(0,212,170,0.05);border-color:var(--teal-border)}
+.fn-name{font-size:11px;font-weight:700;color:var(--text)}
+.fn-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.fn-sub.red{color:var(--red)}
+.fn-sub.teal{color:var(--teal)}
+.flow-arrow{color:var(--text3);font-size:14px;flex-shrink:0}
+.flow-result{margin-top:12px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;text-align:center}
+.flow-result.bad{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,106,0.2)}
+.flow-result.good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,201,134,0.25)}
+
+/* SECTION HEADER */
+.section-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.section-h2{font-size:clamp(26px,3.5vw,38px);font-weight:800;color:var(--text);line-height:1.15;margin-bottom:14px;letter-spacing:-0.01em}
+.section-sub{font-size:15px;color:var(--text2);line-height:1.7;max-width:560px}
+
+/* DEMO */
+.demo-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.agent-toggle{display:flex;justify-content:center;gap:0;margin:32px auto 36px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content}
+.agent-btn{font-family:var(--sans);font-size:12px;font-weight:600;padding:7px 18px;border-radius:7px;border:none;background:transparent;color:var(--text2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px}
+.agent-btn.active{background:var(--teal);color:#07111F;box-shadow:0 2px 12px rgba(0,212,170,0.3)}
+.agent-btn.scam-btn.active{background:var(--red);color:#fff;box-shadow:0 2px 12px rgba(255,77,106,0.3)}
+.score-badge-sm{font-size:9px;font-weight:800;padding:1px 5px;border-radius:3px;letter-spacing:0.05em}
+.agent-btn.active .score-badge-sm{background:rgba(7,17,31,0.25);color:inherit}
+.agent-btn:not(.active) .score-badge-sm{background:var(--border);color:var(--text3)}
+
+.demo-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+
+/* STEP PANEL */
+.step-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);min-height:500px;display:flex;flex-direction:column}
+.step-dots{display:flex;align-items:center;margin-bottom:26px}
+.step-dot-wrap{display:flex;align-items:center;flex:1}
+.step-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:var(--bg);color:var(--text3);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;flex-shrink:0}
+.step-dot.active{background:var(--teal);border-color:var(--teal);color:#07111F;box-shadow:0 0 0 4px rgba(0,212,170,0.15)}
+.step-dot.done{background:var(--teal);border-color:var(--teal);color:#07111F}
+.step-dot.error-dot{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 0 0 4px rgba(255,77,106,0.15)}
+.step-line{flex:1;height:2px;background:var(--border);transition:background 0.3s;margin:0 4px}
+.step-line.done{background:var(--teal)}
+.step-line.error{background:var(--red)}
+.step-header{margin-bottom:18px}
+.step-num{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
+.step-num.error{color:var(--red)}
+.step-title{font-size:17px;font-weight:700;color:var(--text)}
+.stage-body{flex:1}
+.anim-in{animation:slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1) both}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.agent-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.ac-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ac-row:last-child{margin-bottom:0}
+.ac-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--text3)}
+.ac-val{font-family:var(--mono);font-size:11px;color:var(--text);text-align:right}
+.score-chip{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12px;padding:4px 10px;border-radius:6px}
+.score-chip.verified{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,201,134,0.25)}
+.score-chip.blocked{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,106,0.2)}
+
+.code-block{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--text2);overflow-x:auto;white-space:pre;line-height:1.65;margin-bottom:10px}
+.code-block .k{color:var(--teal)}
+.code-block .v{color:var(--green)}
+.code-block .s{color:var(--amber)}
+.code-block .n{color:var(--purple)}
+
+.check-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.check-list li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2);opacity:0;transition:opacity 0.3s}
+.check-list li.show{opacity:1}
+.check-list li::before{content:'';width:18px;height:18px;border-radius:50%;flex-shrink:0;background:var(--border);display:flex;align-items:center;justify-content:center}
+.check-list li.ok::before{background:var(--teal);content:'✓';color:#07111F;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.check-list li.pending::before{border:2px solid var(--amber);background:transparent;content:'';animation:spin 0.9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.ledger-wrap{text-align:center;padding:8px 0 14px}
+.ledger-num{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--teal);margin-bottom:8px}
+.ledger-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px}
+.progress-wrap{background:var(--bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;height:6px;margin-bottom:14px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--purple));width:0%;transition:width 4s linear;border-radius:6px}
+.tx-reveal{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-top:8px;opacity:0;transition:opacity 0.5s}
+.tx-reveal.show{opacity:1}
+.tx-label{font-size:10px;font-weight:600;text-transform:uppercase;color:var(--text3);margin-bottom:4px;letter-spacing:0.07em}
+.tx-hash{font-family:var(--mono);font-size:10px;color:var(--teal);word-break:break-all;margin-bottom:6px}
+.tx-link{font-size:11px;color:var(--teal);opacity:0.7}
+
+.access-box{background:rgba(0,201,134,0.06);border:1px solid rgba(0,201,134,0.25);border-radius:10px;padding:18px;margin-bottom:10px;text-align:center}
+.access-icon{font-size:28px;margin-bottom:6px}
+.access-title{font-size:15px;font-weight:700;color:var(--green);margin-bottom:3px}
+.access-sub{font-size:11px;color:var(--green);opacity:0.7}
+.access-meta{display:flex;flex-direction:column;gap:5px;margin-top:12px}
+.access-meta-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)}
+.access-meta-row::before{content:'✓';color:var(--teal);font-weight:700;font-size:11px}
+
+.error-box{background:var(--red-dim);border:1px solid rgba(255,77,106,0.25);border-radius:10px;padding:18px;text-align:center}
+.error-icon{font-size:28px;margin-bottom:6px}
+.error-title{font-size:15px;font-weight:700;color:var(--red);margin-bottom:4px}
+.error-sub{font-size:12px;color:var(--red);opacity:0.7}
+
+.http-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateX(-6px);transition:all 0.3s}
+.http-row.show{opacity:1;transform:none}
+.http-row:last-child{border-bottom:none}
+.http-badge{font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:2px}
+.http-post{background:var(--purple-dim);color:var(--purple)}
+.http-200{background:var(--green-dim);color:var(--green)}
+.http-402{background:var(--amber-dim);color:var(--amber)}
+.http-row-meta{flex:1}
+.http-row-label{font-size:12px;font-weight:500;color:var(--text)}
+.http-row-sub{font-size:10px;color:var(--text3);font-family:var(--mono)}
+
+.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+.nav-btn{font-family:var(--sans);font-size:12px;font-weight:600;padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.2s}
+.nav-btn:hover:not(:disabled){border-color:var(--teal);color:var(--teal)}
+.nav-btn:disabled{opacity:0.3;cursor:not-allowed}
+.nav-btn.primary{background:var(--teal);border-color:var(--teal);color:#07111F}
+.nav-btn.primary:hover:not(:disabled){background:#00f0c4}
+.nav-btn.restart{background:var(--green);border-color:var(--green);color:#fff}
+.step-counter{font-size:11px;color:var(--text3);font-weight:500}
+
+/* TERMINAL */
+.terminal-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);position:sticky;top:76px}
+.terminal-header{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:10px}
+.terminal-dots{display:flex;gap:5px}
+.td{width:10px;height:10px;border-radius:50%}
+.td1{background:#FF5F57}.td2{background:#FEBC2E}.td3{background:#28C840}
+.terminal-title{font-size:11px;font-weight:600;color:var(--text3);font-family:var(--mono);flex:1;text-align:center}
+.terminal-body{padding:14px;min-height:380px;max-height:480px;overflow-y:auto;font-family:var(--mono);font-size:11.5px;line-height:1.75}
+.log-line{display:flex;gap:0;opacity:0;transition:opacity 0.2s,transform 0.2s;transform:translateY(3px);margin-bottom:1px}
+.log-line.show{opacity:1;transform:none}
+.log-time{color:var(--text3);flex-shrink:0;margin-right:6px}
+.log-type{flex-shrink:0;margin-right:8px;font-weight:700;min-width:44px;font-size:10px}
+.log-event .log-type{color:var(--purple)}
+.log-ok .log-type{color:var(--green)}
+.log-error .log-type{color:var(--red)}
+.log-warn .log-type{color:var(--amber)}
+.log-info .log-type{color:var(--blue)}
+.log-tx .log-type{color:var(--teal)}
+.log-data .log-type{color:var(--text3)}
+.log-msg{color:var(--text2);word-break:break-all;font-size:11px}
+.log-msg.teal{color:var(--teal)}
+.log-msg.green{color:var(--green)}
+.log-msg.red{color:var(--red)}
+.log-msg.purple{color:var(--purple)}
+.log-msg.dim{color:var(--text3)}
+
+/* MICA SECTION */
+.mica-section{background:var(--bg)}
+.mica-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:40px}
+.mica-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;transition:border-color 0.2s,box-shadow 0.2s}
+.mica-card:hover{border-color:var(--teal-border);box-shadow:var(--shadow-teal)}
+.mica-art{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--teal);background:var(--teal-dim);border:1px solid var(--teal-border);padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:10px}
+.mica-card h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.mica-card p{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:12px}
+.mica-feature{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--teal);background:var(--teal-dim);border:1px solid var(--teal-border);padding:6px 12px;border-radius:8px;width:fit-content}
+.mica-table-wrap{margin-top:40px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.mica-table{width:100%;border-collapse:collapse;font-size:13px}
+.mica-table th{text-align:left;padding:12px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);border-bottom:1px solid var(--border);background:var(--bg2)}
+.mica-table td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text2)}
+.mica-table tr:last-child td{border-bottom:none}
+.mica-table tr:hover td{background:rgba(0,212,170,0.03)}
+.mica-table td:first-child{font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:600;white-space:nowrap}
+.mica-table td:nth-child(2){color:var(--text);font-weight:500}
+.mica-table td:last-child .tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--teal-dim);color:var(--teal);border:1px solid var(--teal-border)}
+
+/* ARCHITECTURE */
+.arch-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.arch-diagram{margin-top:40px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.arch-flow{display:flex;align-items:stretch;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.arch-node{flex:1;min-width:140px;padding:24px 16px;display:flex;flex-direction:column;align-items:center;text-align:center;border-right:1px solid var(--border);position:relative}
+.arch-node:last-child{border-right:none}
+.arch-node-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px;border:1px solid var(--border)}
+.arch-node-icon.teal{background:var(--teal-dim);border-color:var(--teal-border)}
+.arch-node-icon.purple{background:var(--purple-dim);border-color:var(--purple-border)}
+.arch-node-icon.green{background:var(--green-dim);border-color:rgba(0,201,134,0.25)}
+.arch-node-icon.amber{background:var(--amber-dim);border-color:rgba(255,176,32,0.25)}
+.arch-node h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.arch-node p{font-size:11px;color:var(--text3);line-height:1.5}
+.arch-node .arch-tag{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--text3);margin-top:8px;background:var(--bg2);padding:2px 8px;border-radius:4px;border:1px solid var(--border)}
+.arch-arrow{display:flex;align-items:center;padding:0 4px;color:var(--teal);font-size:18px;opacity:0.4;flex-shrink:0}
+
+/* VALIDATORS */
+.val-section{background:var(--bg)}
+.val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.val-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:10px}
+.val-header{display:flex;justify-content:space-between;align-items:flex-start}
+.val-name{font-size:15px;font-weight:700;color:var(--text)}
+.val-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--teal-dim);color:var(--teal);border:1px solid var(--teal-border)}
+.val-sub{font-size:12px;color:var(--text2);line-height:1.6}
+.val-meta{font-family:var(--mono);font-size:10px;color:var(--text3)}
+.val-open{border-style:dashed;background:transparent}
+.val-open .val-name{color:var(--text3)}
+
+/* FOOTER */
+footer{background:var(--card);border-top:1px solid var(--border);padding:36px 0}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-brand{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:var(--text)}
+.footer-brand .kya{font-size:8px;font-weight:800;background:var(--teal);color:#07111F;padding:2px 6px;border-radius:3px}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:12px;color:var(--text3)}
+.footer-links a:hover{color:var(--teal)}
+.footer-note{font-size:11px;color:var(--text3);font-family:var(--mono)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .demo-layout,.prob-grid,.mica-grid,.val-grid{grid-template-columns:1fr}
+  .terminal-panel{position:static}
+  .hero{padding:70px 0 56px}
+  .section{padding:64px 0}
+  .arch-flow{flex-wrap:wrap}
+  .arch-node{min-width:120px;border-bottom:1px solid var(--border)}
+}
+@media(max-width:640px){
+  .nav-links{display:none}
+  .hero h1{font-size:34px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Verun <span class="kya">KYA</span></div>
+  <div class="nav-links">
+    <a href="#demo">Demo</a>
+    <a href="#mica">MiCA</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#validators">Validators</a>
+  </div>
+  <div class="nav-right">
+    <div class="algo-badge">
+      <span class="algo-dot"></span>
+      Algorand Testnet
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">
+        <span style="width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse-teal 2s infinite;flex-shrink:0"></span>
+        Verun Protocol · Algorand · MiCA-Ready · March 2026
+      </div>
+      <h1>MiCA-Compliant<br><span class="line2">AI Agents. By Design.</span></h1>
+      <p class="hero-sub">Verun is the Know Your Agent (KYA) compliance infrastructure for AI agents operating in European regulated finance — with on-chain attestation, 2-of-3 validator consensus, and full MiCA audit trail on Algorand.</p>
+      <div class="hero-pills">
+        <span class="pill pill-teal">MiCA Art. 68 · CASP</span>
+        <span class="pill pill-teal">AML / CFT Ready</span>
+        <span class="pill pill-purple">x402 Protocol</span>
+        <span class="pill pill-purple">ARC-4 Contracts</span>
+        <span class="pill pill-green">2/3 Consensus</span>
+        <span class="pill pill-green">~3.6s Finality</span>
+        <span class="pill pill-amber">Travel Rule</span>
+        <span class="pill pill-amber">Audit Trail On-Chain</span>
+      </div>
+      <div class="hero-btns">
+        <a href="#demo" class="btn btn-teal">Run Compliance Demo →</a>
+        <a href="#mica" class="btn btn-outline">View MiCA Mapping</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM / SOLUTION -->
+<section class="section" id="problem" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-h2">AI agents in EU finance<br>are a MiCA compliance gap.</h2>
+    <p class="section-sub">Under MiCA, CASPs and financial institutions must verify every entity transacting on their platform. AI agents have no identity, no compliance record — and no one checks.</p>
+    <div class="prob-grid">
+      <div class="prob-card problem">
+        <div class="prob-tag red">⚠ Without Verun</div>
+        <h3>Unverified Agent = MiCA Violation</h3>
+        <p>AI agents operating without KYA verification expose CASPs to Art. 68 violations, AML penalties, and ESMA enforcement action.</p>
+        <div class="flow-row">
+          <div class="flow-node bad"><div class="fn-name">AI Agent</div><div class="fn-sub red">Unknown</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node bad"><div class="fn-name">CASP</div><div class="fn-sub red">No KYA</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node bad"><div class="fn-name">Market</div><div class="fn-sub red">Unmonitored</div></div>
+        </div>
+        <div class="flow-result bad">MiCA Art. 68 Violation · AML Exposure</div>
+      </div>
+      <div class="prob-card solution">
+        <div class="prob-tag teal">✓ With Verun</div>
+        <h3>Every Agent Gets a Compliance Record</h3>
+        <p>Verun assigns every AI agent a verifiable KYA score, anchored on Algorand. CASPs get an immutable audit trail before any transaction is permitted.</p>
+        <div class="flow-row">
+          <div class="flow-node good"><div class="fn-name">AI Agent</div><div class="fn-sub teal">KYA Scored</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node good"><div class="fn-name">Verun</div><div class="fn-sub teal">Consensus</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node good"><div class="fn-name">Algorand</div><div class="fn-sub teal">On-Chain</div></div>
+        </div>
+        <div class="flow-result good">MiCA-Compliant · Full Audit Trail</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="section demo-section" id="demo">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-label">Interactive Demo</div>
+      <h2 class="section-h2" style="margin-bottom:8px">Watch an agent get verified.</h2>
+      <p style="font-size:14px;color:var(--text2)">Select an agent profile and step through the KYA compliance flow.</p>
+    </div>
+
+    <div class="agent-toggle">
+      <button class="agent-btn active" id="btn-good" onclick="selectAgent('good')">
+        🤖 agt_aurora_3f9a <span class="score-badge-sm">820</span>
+      </button>
+      <button class="agent-btn" id="btn-med" onclick="selectAgent('med')">
+        🤖 agt_dex_7c12 <span class="score-badge-sm">610</span>
+      </button>
+      <button class="agent-btn scam-btn" id="btn-scam" onclick="selectAgent('scam')">
+        ☠ agt_phantom_0x00 <span class="score-badge-sm">120</span>
+      </button>
+    </div>
+
+    <div class="demo-layout">
+      <!-- LEFT: Step Panel -->
+      <div class="step-panel">
+        <div class="step-dots" id="step-dots">
+          <div class="step-dot-wrap">
+            <div class="step-dot active" id="dot-1" onclick="goStep(1)">1</div>
+            <div class="step-line" id="line-1"></div>
+          </div>
+          <div class="step-dot-wrap">
+            <div class="step-dot" id="dot-2" onclick="goStep(2)">2</div>
+            <div class="step-line" id="line-2"></div>
+          </div>
+          <div class="step-dot-wrap">
+            <div class="step-dot" id="dot-3" onclick="goStep(3)">3</div>
+            <div class="step-line" id="line-3"></div>
+          </div>
+          <div class="step-dot-wrap" style="flex:0">
+            <div class="step-dot" id="dot-4" onclick="goStep(4)">4</div>
+          </div>
+        </div>
+
+        <div id="stage-body" class="stage-body"></div>
+
+        <div class="step-nav">
+          <button class="nav-btn" id="btn-prev" onclick="prevStep()" disabled>← Back</button>
+          <span class="step-counter" id="step-counter">Step 1 of 4</span>
+          <button class="nav-btn primary" id="btn-next" onclick="nextStep()">Next →</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Terminal -->
+      <div class="terminal-panel">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="td td1"></div><div class="td td2"></div><div class="td td3"></div></div>
+          <div class="terminal-title">verun-kya · compliance log</div>
+        </div>
+        <div class="terminal-body" id="terminal-body"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MICA COMPLIANCE -->
+<section class="section mica-section" id="mica">
+  <div class="container">
+    <div class="section-label">MiCA Compliance</div>
+    <h2 class="section-h2">Built for European regulation.</h2>
+    <p class="section-sub">Every Verun feature maps directly to a MiCA requirement. CASPs get compliance by default, not as an afterthought.</p>
+
+    <div class="mica-grid">
+      <div class="mica-card">
+        <div class="mica-art">MiCA Art. 68</div>
+        <h4>CASP Authorisation & Agent Verification</h4>
+        <p>CASPs must verify all entities using their platform. Verun's KYA score provides a machine-readable, auditable identity record for every AI agent before access is granted.</p>
+        <div class="mica-feature">✓ KYA Score · On-Chain Identity</div>
+      </div>
+      <div class="mica-card">
+        <div class="mica-art">MiCA Art. 72</div>
+        <h4>AML/CFT Obligations</h4>
+        <p>Verun's 2-of-3 validator consensus acts as a distributed AML screening layer. Agents with scores below threshold are automatically blocked — no manual intervention required.</p>
+        <div class="mica-feature">✓ Validator Consensus · Auto-BLOCK</div>
+      </div>
+      <div class="mica-card">
+        <div class="mica-art">MiCA Art. 75</div>
+        <h4>Record-Keeping & Audit Trail</h4>
+        <p>Every KYA evaluation is anchored on Algorand via ARC-4 smart contracts. Immutable, timestamped, and retrievable by regulators at any time. ~3.6s settlement.</p>
+        <div class="mica-feature">✓ Algorand ARC-4 · Immutable Log</div>
+      </div>
+      <div class="mica-card">
+        <div class="mica-art">FATF Travel Rule</div>
+        <h4>Agent Transfer Monitoring</h4>
+        <p>Agent-initiated transfers above threshold are flagged for additional verification. Verun's operation scoring differentiates between read, transfer, mint, and order operations.</p>
+        <div class="mica-feature">✓ Operation-Level Scoring</div>
+      </div>
+    </div>
+
+    <div class="mica-table-wrap">
+      <table class="mica-table">
+        <thead>
+          <tr>
+            <th>Regulation</th>
+            <th>Requirement</th>
+            <th>Verun Feature</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>MiCA Art. 68</td><td>CASP Agent Verification</td><td>KYA Score + Identity Anchor</td><td><span class="tag">Live</span></td></tr>
+          <tr><td>MiCA Art. 72</td><td>AML/CFT Screening</td><td>2-of-3 Validator Consensus</td><td><span class="tag">Live</span></td></tr>
+          <tr><td>MiCA Art. 75</td><td>Audit Trail / Record-Keeping</td><td>Algorand ARC-4 On-Chain Anchor</td><td><span class="tag">Live</span></td></tr>
+          <tr><td>MiCA Art. 67</td><td>Operational Risk Controls</td><td>BLOCK Verdict · Auto-Reject</td><td><span class="tag">Live</span></td></tr>
+          <tr><td>FATF Travel Rule</td><td>Transfer Monitoring ≥ €1,000</td><td>Operation Scoring (transfer/mint/order)</td><td><span class="tag">Live</span></td></tr>
+          <tr><td>ESMA Guidelines</td><td>Automated Decision Transparency</td><td>Validator Vote Log + Score Breakdown</td><td><span class="tag">Live</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section class="section arch-section" id="architecture">
+  <div class="container">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-h2">How it works.</h2>
+    <p class="section-sub">Five layers from agent request to on-chain compliance record. The x402 payment protocol gates access — agents pay only when compliant.</p>
+    <div class="arch-diagram">
+      <div class="arch-flow">
+        <div class="arch-node">
+          <div class="arch-node-icon teal">🤖</div>
+          <h4>AI Agent</h4>
+          <p>Presents Algorand address + operation intent</p>
+          <div class="arch-tag">agt_3f9a...</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">
+          <div class="arch-node-icon purple">🔐</div>
+          <h4>x402 Gate</h4>
+          <p>HTTP/402 payment challenge — agent pays micro-fee to proceed</p>
+          <div class="arch-tag">HTTP 402 → 200</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">
+          <div class="arch-node-icon teal">⚖️</div>
+          <h4>Verun KYA</h4>
+          <p>Score evaluation + 2-of-3 validator consensus</p>
+          <div class="arch-tag">/api/evaluate</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">
+          <div class="arch-node-icon amber">🏛️</div>
+          <h4>3 Validators</h4>
+          <p>Independent compliance nodes vote on agent risk tier</p>
+          <div class="arch-tag">LOW/MED/HIGH/BLOCK</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">
+          <div class="arch-node-icon green">⛓️</div>
+          <h4>Algorand</h4>
+          <p>ARC-4 smart contract anchors verdict + timestamp on-chain</p>
+          <div class="arch-tag">~3.6s · ARC-4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALIDATORS -->
+<section class="section val-section" id="validators">
+  <div class="container">
+    <div class="section-label">Validator Network</div>
+    <h2 class="section-h2">2-of-3 Consensus. Decentralised.</h2>
+    <p class="section-sub">Three independent validators vote on each agent's compliance tier. No single point of failure. No single point of censorship.</p>
+    <div class="val-grid">
+      <div class="val-card">
+        <div class="val-header"><div class="val-name">Val-EU-01</div><span class="val-tag">Active</span></div>
+        <div class="val-sub">EU-regulated compliance node. Enforces MiCA Art. 68 + FATF Travel Rule thresholds by default.</div>
+        <div class="val-meta">consensus: score_based_policy · votes: 2,841</div>
+      </div>
+      <div class="val-card">
+        <div class="val-header"><div class="val-name">Val-Neutral-02</div><span class="val-tag">Active</span></div>
+        <div class="val-sub">Jurisdiction-neutral node. Applies risk-based scoring with AML/CFT cross-reference checks.</div>
+        <div class="val-meta">consensus: risk_based · votes: 2,719</div>
+      </div>
+      <div class="val-card val-open">
+        <div class="val-header"><div class="val-name">Open Slot</div><span style="font-size:9px;color:var(--text3);border:1px dashed var(--border);padding:2px 7px;border-radius:4px">Apply</span></div>
+        <div class="val-sub" style="color:var(--text3)">Third validator slot open for institutional compliance partners. Earn fee share on every evaluation.</div>
+        <div class="val-meta">fee share: 10% per evaluation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">Verun <span class="kya">KYA</span></div>
+      <div class="footer-links">
+        <a href="#demo">Demo</a>
+        <a href="#mica">MiCA</a>
+        <a href="#architecture">Architecture</a>
+        <a href="https://github.com/rafaschul/verun-algorand-mvp">GitHub</a>
+      </div>
+      <div class="footer-note">Algorand Testnet · March 2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── STATE ───────────────────────────────────────────
+const AGENTS = {
+  good: {
+    id: 'agt_aurora_3f9a',
+    score: 820,
+    operation: 'transfer',
+    tier: 'LOW',
+    permitted: true,
+    kickback: 10,
+    address: 'ALGO7X3F9A...KP2M',
+    txid: 'ALGO' + Math.random().toString(36).substr(2,40).toUpperCase(),
+    color: 'teal'
+  },
+  med: {
+    id: 'agt_dex_7c12',
+    score: 610,
+    operation: 'order',
+    tier: 'MED',
+    permitted: true,
+    kickback: 5,
+    address: 'ALGO4D7C12...NQ8R',
+    txid: 'ALGO' + Math.random().toString(36).substr(2,40).toUpperCase(),
+    color: 'teal'
+  },
+  scam: {
+    id: 'agt_phantom_0x00',
+    score: 120,
+    operation: 'transfer',
+    tier: 'BLOCK',
+    permitted: false,
+    kickback: 0,
+    address: 'ALGO0X0000...DEAD',
+    txid: null,
+    color: 'red'
+  }
+};
+
+let currentAgent = 'good';
+let currentStep = 1;
+let logIndex = 0;
+let logQueue = [];
+let logTimer = null;
+
+// ─── LOG HELPERS ─────────────────────────────────────
+function now() {
+  const d = new Date();
+  return d.toTimeString().substr(0,8);
+}
+
+function addLog(type, typeLabel, msg, cls='') {
+  const body = document.getElementById('terminal-body');
+  const line = document.createElement('div');
+  line.className = `log-line log-${type}`;
+  line.innerHTML = `<span class="log-time">${now()}</span><span class="log-type">${typeLabel}</span><span class="log-msg ${cls}">${msg}</span>`;
+  body.appendChild(line);
+  setTimeout(()=>line.classList.add('show'), 20);
+  body.scrollTop = body.scrollHeight;
+}
+
+function queueLogs(logs) {
+  clearInterval(logTimer);
+  logQueue = logs;
+  logIndex = 0;
+  logTimer = setInterval(() => {
+    if (logIndex >= logQueue.length) { clearInterval(logTimer); return; }
+    const l = logQueue[logIndex++];
+    addLog(l[0], l[1], l[2], l[3]||'');
+  }, 300);
+}
+
+// ─── AGENT SELECT ────────────────────────────────────
+function selectAgent(key) {
+  currentAgent = key;
+  currentStep = 1;
+  ['good','med','scam'].forEach(k => {
+    document.getElementById('btn-'+k).classList.remove('active');
+  });
+  document.getElementById('btn-'+key).classList.add('active');
+  document.getElementById('terminal-body').innerHTML = '';
+  renderStep(1);
+  addLog('event','EVENT',`Agent selected: ${AGENTS[key].id}`,'purple');
+  addLog('info','INFO',`Score: ${AGENTS[key].score} · Operation: ${AGENTS[key].operation}`,'dim');
+}
+
+// ─── STEP NAVIGATION ─────────────────────────────────
+function goStep(n) { if(n < currentStep) { currentStep = n; renderStep(n); } }
+function nextStep() { if(currentStep < 4) { currentStep++; renderStep(currentStep); } }
+function prevStep() { if(currentStep > 1) { currentStep--; renderStep(currentStep); } }
+
+function updateDots(step, isError) {
+  for(let i=1;i<=4;i++){
+    const dot = document.getElementById('dot-'+i);
+    dot.className = 'step-dot';
+    if(i < step) dot.classList.add(isError && i===step-1 ? 'error-dot' : 'done');
+    if(i === step) dot.classList.add(isError ? 'error-dot' : 'active');
+  }
+  for(let i=1;i<=3;i++){
+    const line = document.getElementById('line-'+i);
+    line.className = 'step-line';
+    if(i < step) line.classList.add(isError && i===step-1 ? 'error' : 'done');
+  }
+  document.getElementById('step-counter').textContent = `Step ${step} of 4`;
+  document.getElementById('btn-prev').disabled = step === 1;
+  const nextBtn = document.getElementById('btn-next');
+  if(step === 4){
+    nextBtn.textContent = 'Restart';
+    nextBtn.className = 'nav-btn restart';
+    nextBtn.onclick = () => selectAgent(currentAgent);
+  } else {
+    nextBtn.textContent = 'Next →';
+    nextBtn.className = 'nav-btn primary';
+    nextBtn.onclick = nextStep;
+  }
+}
+
+// ─── STEP RENDERERS ──────────────────────────────────
+function renderStep(n) {
+  const a = AGENTS[currentAgent];
+  const body = document.getElementById('stage-body');
+  const isScam = currentAgent === 'scam';
+  const isError = isScam && n >= 3;
+  updateDots(n, isError);
+  body.innerHTML = '';
+
+  if(n === 1) {
+    body.innerHTML = `
+      <div class="anim-in">
+        <div class="step-header">
+          <div class="step-num">Step 1 · Identity</div>
+          <div class="step-title">Agent presents credentials</div>
+        </div>
+        <div class="agent-card">
+          <div class="ac-row"><span class="ac-label">Agent ID</span><span class="ac-val" style="color:var(--teal)">${a.id}</span></div>
+          <div class="ac-row"><span class="ac-label">Algorand Address</span><span class="ac-val">${a.address}</span></div>
+          <div class="ac-row"><span class="ac-label">Operation</span><span class="ac-val">${a.operation.toUpperCase()}</span></div>
+          <div class="ac-row"><span class="ac-label">Protocol</span><span class="ac-val">x402 / HTTP</span></div>
+        </div>
+        <div class="code-block"><span class="k">POST</span> /api/evaluate
+<span class="k">{</span>
+  <span class="n">"agentId"</span>: <span class="s">"${a.id}"</span>,
+  <span class="n">"score"</span>:   <span class="v">${a.score}</span>,
+  <span class="n">"operation"</span>: <span class="s">"${a.operation}"</span>
+<span class="k">}</span></div>
+      </div>`;
+    queueLogs([
+      ['event','EVENT',`${a.id} → /api/evaluate`,'teal'],
+      ['info','INFO',`x402 challenge issued — awaiting payment`,'dim'],
+      ['ok','OK',`Micro-fee paid · proceeding to KYA check`,'green'],
+    ]);
+  }
+
+  if(n === 2) {
+    body.innerHTML = `
+      <div class="anim-in">
+        <div class="step-header">
+          <div class="step-num">Step 2 · Scoring</div>
+          <div class="step-title">Verun evaluates agent risk</div>
+        </div>
+        <div class="agent-card">
+          <div class="ac-row"><span class="ac-label">KYA Score</span><span class="ac-val" style="color:var(--teal);font-size:18px;font-weight:700">${a.score}</span></div>
+          <div class="ac-row"><span class="ac-label">Risk Tier</span><span class="ac-val"><span style="background:${a.tier==='BLOCK'?'var(--red-dim)':a.tier==='LOW'?'var(--green-dim)':'var(--amber-dim)'};color:${a.tier==='BLOCK'?'var(--red)':a.tier==='LOW'?'var(--green)':'var(--amber)'};padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">${a.tier}</span></span></div>
+          <div class="ac-row"><span class="ac-label">Operation Min.</span><span class="ac-val">${a.operation==='transfer'?'500':a.operation==='order'?'600':'300'} required</span></div>
+          <div class="ac-row"><span class="ac-label">Permitted</span><span class="ac-val" style="color:${a.permitted?'var(--green)':'var(--red)'}">${a.permitted ? '✓ YES' : '✗ NO'}</span></div>
+        </div>
+        <ul class="check-list" id="cl2">
+          <li id="c2-1">Score threshold check (${a.score} ${a.score >= 300 ? '≥' : '<'} 300)</li>
+          <li id="c2-2">Operation level check (${a.operation}: ${a.score >= (a.operation==='order'?600:500) ? '✓' : '✗'})</li>
+          <li id="c2-3">AML/CFT flag scan</li>
+          <li id="c2-4">MiCA Art. 68 compliance check</li>
+        </ul>
+      </div>`;
+    [100,400,700,1000].forEach((t,i) => {
+      setTimeout(()=>{
+        const el = document.getElementById(`c2-${i+1}`);
+        if(el){ el.classList.add('show'); setTimeout(()=>el.classList.add('ok'),200); }
+      }, t);
+    });
+    queueLogs([
+      ['info','INFO',`Evaluating score: ${a.score}`,'dim'],
+      ['data','DATA',`threshold check → ${a.score >= 300 ? 'PASS' : 'FAIL'}`],
+      ['data','DATA',`operation check (${a.operation}) → ${a.permitted ? 'PASS' : 'FAIL'}`],
+      ['data','DATA',`AML scan → ${a.permitted ? 'CLEAR' : 'FLAGGED'}`, a.permitted ? '' : 'red'],
+      [a.permitted ? 'ok' : 'error', a.permitted ? 'OK' : 'BLOCK', `Tier assigned: ${a.tier}`, a.permitted ? 'green' : 'red'],
+    ]);
+  }
+
+  if(n === 3) {
+    if(isScam) {
+      body.innerHTML = `
+        <div class="anim-in">
+          <div class="step-header">
+            <div class="step-num error">Step 3 · Consensus</div>
+            <div class="step-title">Validators vote: BLOCKED</div>
+          </div>
+          <div class="error-box">
+            <div class="error-icon">🚫</div>
+            <div class="error-title">Agent Blocked by Consensus</div>
+            <div class="error-sub">All 3 validators returned BLOCK verdict</div>
+          </div>
+          <div class="code-block"><span class="k">consensus</span>: <span style="color:var(--red)">"BLOCK"</span>
+<span class="k">permitted</span>: <span style="color:var(--red)">false</span>
+<span class="k">reason</span>:    <span class="s">"threshold_not_met"</span>
+<span class="k">mica_ref</span>:  <span class="s">"Art. 68 · Art. 72"</span></div>
+        </div>`;
+      queueLogs([
+        ['event','EVENT',`Validator consensus initiated`,'purple'],
+        ['data','DATA',`Val-EU-01 → BLOCK (score: ${a.score} < 300)`,'red'],
+        ['data','DATA',`Val-Neutral-02 → BLOCK`,'red'],
+        ['error','BLOCK',`Consensus: BLOCK · MiCA Art. 68 triggered`,'red'],
+      ]);
+    } else {
+      body.innerHTML = `
+        <div class="anim-in">
+          <div class="step-header">
+            <div class="step-num">Step 3 · Consensus</div>
+            <div class="step-title">2-of-3 validators confirm</div>
+          </div>
+          <ul class="check-list" id="cl3">
+            <li id="c3-1">Val-EU-01 → <strong style="color:var(--green)">${a.tier}</strong> (MiCA compliant)</li>
+            <li id="c3-2">Val-Neutral-02 → <strong style="color:var(--green)">${a.tier}</strong> (AML clear)</li>
+            <li id="c3-3">Consensus reached: 2-of-3 ✓</li>
+            <li id="c3-4">Kickback rate: ${a.kickback}% assigned</li>
+          </ul>
+          <div class="code-block" style="margin-top:12px"><span class="k">votes</span>: [
+  { <span class="n">validator</span>: <span class="s">"Val-EU-01"</span>, <span class="n">vote</span>: <span class="v">"${a.tier}"</span> },
+  { <span class="n">validator</span>: <span class="s">"Val-Neutral-02"</span>, <span class="n">vote</span>: <span class="v">"${a.tier}"</span> }
+]
+<span class="k">consensus</span>: <span class="v">"${a.tier}"</span> · <span class="k">permitted</span>: <span class="v">true</span></div>
+        </div>`;
+      [100,500,900,1300].forEach((t,i) => {
+        setTimeout(()=>{
+          const el = document.getElementById(`c3-${i+1}`);
+          if(el){ el.classList.add('show'); setTimeout(()=>el.classList.add('ok'),200); }
+        }, t);
+      });
+      queueLogs([
+        ['event','EVENT',`Validator consensus initiated`,'purple'],
+        ['data','DATA',`Val-EU-01 → ${a.tier}`,''],
+        ['data','DATA',`Val-Neutral-02 → ${a.tier}`,''],
+        ['ok','OK',`2/3 consensus: ${a.tier} · permitted: true`,'green'],
+      ]);
+    }
+  }
+
+  if(n === 4) {
+    if(isScam) {
+      body.innerHTML = `
+        <div class="anim-in">
+          <div class="step-header">
+            <div class="step-num error">Step 4 · Rejected</div>
+            <div class="step-title">No on-chain record created</div>
+          </div>
+          <div class="error-box">
+            <div class="error-icon">📵</div>
+            <div class="error-title">Access Denied · MiCA Compliant</div>
+            <div class="error-sub">No transaction anchored. Agent flagged for review.</div>
+          </div>
+          <div class="code-block" style="margin-top:14px"><span class="k">status</span>: <span style="color:var(--red)">"REJECTED"</span>
+<span class="k">anchor</span>:  <span style="color:var(--text3)">null</span>
+<span class="k">action</span>:  <span class="s">"flagged_for_review"</span>
+<span class="k">mica</span>:    <span class="s">"Art. 68 · Art. 72 triggered"</span></div>
+        </div>`;
+      queueLogs([
+        ['error','BLOCK',`No Algorand tx created`,'red'],
+        ['warn','WARN',`Agent flagged for ESMA review`,''],
+        ['ok','OK',`MiCA Art. 68 + 72 compliance preserved`,'green'],
+      ]);
+    } else {
+      const short = a.txid ? a.txid.substr(0,24)+'...' : '—';
+      body.innerHTML = `
+        <div class="anim-in">
+          <div class="step-header">
+            <div class="step-num">Step 4 · Anchored</div>
+            <div class="step-title">Verdict anchored on Algorand</div>
+          </div>
+          <div class="access-box">
+            <div class="access-icon">✅</div>
+            <div class="access-title">Access Granted · MiCA Compliant</div>
+            <div class="access-sub">KYA verdict anchored · ARC-4 · ~3.6s</div>
+            <div class="access-meta">
+              <div class="access-meta-row">MiCA Art. 68 · 72 · 75 satisfied</div>
+              <div class="access-meta-row">Immutable audit trail created</div>
+              <div class="access-meta-row">Kickback: ${a.kickback}% to agent</div>
+            </div>
+          </div>
+          <div class="tx-reveal show">
+            <div class="tx-label">Algorand TxID</div>
+            <div class="tx-hash">${short}</div>
+            <div class="tx-link">↗ View on AlgoExplorer (Testnet)</div>
+          </div>
+          <div class="progress-wrap" style="margin-top:10px"><div class="progress-fill" id="prog"></div></div>
+        </div>`;
+      setTimeout(()=>{ const p=document.getElementById('prog'); if(p) p.style.width='100%'; }, 100);
+      queueLogs([
+        ['tx','TX',`Anchoring to Algorand ARC-4...`,'teal'],
+        ['tx','TX',`txID: ${short}`,'dim'],
+        ['ok','OK',`Anchored · ~3.6s · ARC-4`,'green'],
+        ['ok','OK',`MiCA audit trail complete`,'green'],
+        ['info','INFO',`Kickback ${a.kickback}% → ${a.id}`,'dim'],
+      ]);
+    }
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderStep(1);
+  addLog('info','INFO','Verun KYA node online','teal');
+  addLog('info','INFO','Algorand Testnet connected','dim');
+  addLog('event','EVENT','Select an agent to begin','purple');
+});
+</script>
+</body>
+</html>
