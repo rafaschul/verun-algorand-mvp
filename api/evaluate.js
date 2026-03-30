@@ -20,16 +20,21 @@ module.exports = async function handler(req, res) {
       validatorIds
     });
 
-    const anchor = await anchorEvaluation({
-      type: 'verun-evaluation',
-      agentId,
-      score: Number(score),
-      operation,
-      consensus: verdict.consensus,
-      permitted: verdict.permitted,
-      validators: verdict.validators_used.map(v => v.id),
-      ts: verdict.ts
-    });
+    let anchor = null;
+    try {
+      anchor = await anchorEvaluation({
+        type: 'verun-evaluation',
+        agentId,
+        score: Number(score),
+        operation,
+        consensus: verdict.consensus,
+        permitted: verdict.permitted,
+        validators: verdict.validators_used.map(v => v.id),
+        ts: verdict.ts
+      });
+    } catch (anchorErr) {
+      anchor = { error: anchorErr.message, status: 'anchor_failed' };
+    }
 
     res.status(200).json(safeJson({ success: true, verdict, anchor }));
   } catch (e) {
