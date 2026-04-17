@@ -42,8 +42,6 @@ async function mintSBT({ agentId, score }) {
 
   const note = new Uint8Array(Buffer.from(JSON.stringify(metadata)).slice(0, 900));
 
-  const ZERO = zeroAddress();
-
   const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
     sender,
     suggestedParams: params,
@@ -52,9 +50,9 @@ async function mintSBT({ agentId, score }) {
     defaultFrozen: true,
     unitName: 'VSBT',
     assetName: `Verun SBT ${agentId}`.slice(0, 32),
-    manager: ZERO,
-    reserve: ZERO,
-    freeze: ZERO,
+    manager: undefined,
+    reserve: undefined,
+    freeze: undefined,
     clawback: sender,
     note
   });
@@ -70,9 +68,9 @@ async function mintSBT({ agentId, score }) {
     explorer: `https://testnet.algoexplorer.io/tx/${txid}`,
     metadata,
     roles: {
-      manager: ZERO,
-      reserve: ZERO,
-      freeze: ZERO,
+      manager: null,
+      reserve: null,
+      freeze: null,
       clawback: sender
     }
   };
