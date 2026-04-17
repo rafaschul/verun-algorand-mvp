@@ -62,6 +62,7 @@ Beide Chains sind **komplementär, nicht kompetitiv.**
 GET  /api/health         → Service status + network
 GET  /api/validators     → List available validators
 GET  /api/funding-status → Wallet balance + faucet guidance
+GET  /api/config-check   → Env + mnemonic + algod diagnostics
 POST /api/score          → Score evaluation (kein Anchor)
 POST /api/evaluate       → Score + 2-of-N Consensus + Algorand Anchor
 POST /api/mint-sbt       → Mint Verun SBT (ASA, defaultFrozen, clawback)

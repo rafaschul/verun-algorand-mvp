@@ -17,12 +17,17 @@ curl -sf "$BASE_URL/api/validators" >/tmp/verun_validators.json
 jq -r '.total' /tmp/verun_validators.json
 
 echo
-printf "[3/4] funding status ... "
+printf "[3/5] funding status ... "
 curl -sf "$BASE_URL/api/funding-status" >/tmp/verun_funding.json
 jq -r '.balance.algo' /tmp/verun_funding.json
 
 echo
-printf "[4/4] evaluate ... "
+printf "[4/5] config check ... "
+curl -sf "$BASE_URL/api/config-check" >/tmp/verun_config.json
+jq -r '.checks.mnemonic_present, .checks.mnemonic_valid, .checks.address_match' /tmp/verun_config.json
+
+echo
+printf "[5/5] evaluate ... "
 curl -sf -X POST "$BASE_URL/api/evaluate" \
   -H "Content-Type: application/json" \
   -d '{"agentId":"agt_demo","score":820,"operation":"transfer","validatorIds":["val-verun-eu-01","val-tokenforge-05","val-noah-04"]}' >/tmp/verun_eval.json
