@@ -56,12 +56,14 @@ Beide Chains sind **komplementär, nicht kompetitiv.**
 - **GitHub:** https://github.com/rafaschul/verun-algorand-mvp
 - **Algorand Testnet:** Note-Transactions als on-chain Anchoring aktiv
 
-### API Endpoints (alle live)
+### API Endpoints (live + new)
 
 ```
-GET  /api/health   → Service status + network
-POST /api/score    → Score evaluation (kein Anchor)
-POST /api/evaluate → Score + 2-of-3 Consensus + Algorand Anchor
+GET  /api/health    → Service status + network
+GET  /api/validators → List available validators
+POST /api/score     → Score evaluation (kein Anchor)
+POST /api/evaluate  → Score + 2-of-N Consensus + Algorand Anchor
+POST /api/mint-sbt  → Mint Verun SBT (ASA, defaultFrozen, clawback)
 ```
 
 ### Beispiel-Call

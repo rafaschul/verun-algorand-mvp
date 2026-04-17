@@ -345,7 +345,7 @@ footer{background:var(--card);border-top:1px solid var(--border);padding:36px 0}
         <span class="pill pill-amber">x402 Protocol</span>
       </div>
       <div class="hero-btns">
-        <a href="#demo" class="btn btn-teal">Run Demo →</a>
+        <button class="btn btn-teal" onclick="runLiveDemo()">Run Demo →</button>
         <a href="#platforms" class="btn btn-outline">View Platforms</a>
       </div>
     </div>
@@ -400,6 +400,8 @@ footer{background:var(--card);border-top:1px solid var(--border);padding:36px 0}
       <button class="mode-tab" id="tab-supervised" onclick="setMode('supervised')">👤 Supervised</button>
       <button class="mode-tab auto-tab" id="tab-auto" onclick="setMode('auto')">⚡ Autonomous</button>
     </div>
+
+    <div id="live-demo-result" style="max-width:900px;margin:16px auto 0;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--text2);display:none"></div>
 
     <div class="demo-layout">
       <div class="step-panel" id="step-panel">
@@ -583,6 +585,14 @@ footer{background:var(--card);border-top:1px solid var(--border);padding:36px 0}
 let currentMode = 'discover';
 let currentStep = 1;
 let logTimer = null;
+let lastLiveEvaluation = null;
+
+const LIVE_DEMO_PAYLOAD = {
+  agentId: 'agt_demo',
+  score: 820,
+  operation: 'transfer',
+  validatorIds: ['val-verun-eu-01','val-tokenforge-05','val-noah-04']
+};
 
 const MODES = {
   discover: {
@@ -679,6 +689,54 @@ function setMode(mode) {
   addLog('agent','AGENT',`Mode: ${mode.toUpperCase()}`, mode==='auto'?'purple':'teal');
 }
 
+async function runLiveDemo() {
+  window.location.hash = '#demo';
+  const panel = document.getElementById('live-demo-result');
+  panel.style.display = 'block';
+  panel.innerHTML = '⏳ Calling <code>/api/evaluate</code> with live payload...';
+
+  document.getElementById('terminal-body').innerHTML = '';
+  addLog('agent','AGENT','Running live evaluate call...','teal');
+  addLog('verun','VERUN',`payload: ${JSON.stringify(LIVE_DEMO_PAYLOAD)}`,'dim');
+
+  try {
+    const res = await fetch('/api/evaluate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(LIVE_DEMO_PAYLOAD)
+    });
+    const data = await res.json();
+    const verdict = data?.verdict || {};
+    const anchor = data?.anchor || {};
+    const tx = anchor?.txid || null;
+    lastLiveEvaluation = { verdict, anchor };
+
+    addLog('ok','OK',`consensus: ${verdict.consensus || 'n/a'} · permitted: ${String(verdict.permitted)}`,'green');
+    if (tx) {
+      addLog('tx','TX',`anchor txid: ${tx}`,'teal');
+      addLog('tx','TX',anchor.explorer || `https://testnet.algoexplorer.io/tx/${tx}`,'dim');
+    } else {
+      addLog('warn','WARN',`anchor: ${anchor.status || 'unavailable'} ${anchor.error ? `(${anchor.error})` : ''}`,'amber');
+    }
+
+    panel.innerHTML = `
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+        <span class="pill pill-${verdict.permitted ? 'green' : 'amber'}">permitted: ${String(verdict.permitted)}</span>
+        <span class="pill pill-${verdict.consensus === 'LOW' ? 'green' : 'amber'}">consensus: ${verdict.consensus || 'n/a'}</span>
+        <span class="pill pill-teal">operation: ${verdict.operation || 'n/a'}</span>
+      </div>
+      <div><strong>Anchor:</strong> ${tx ? `<a href="${anchor.explorer}" target="_blank">${tx}</a>` : `not anchored (${anchor.status || 'unknown'})`}</div>
+    `;
+
+    setMode('discover');
+    currentStep = 3;
+    renderStep();
+  } catch (e) {
+    addLog('warn','WARN',`live call failed: ${e.message}`,'amber');
+    panel.innerHTML = `❌ Live demo failed: ${e.message}`;
+  }
+}
+
 // ─── STEP RENDERERS ─────────────────────────────────────
 function renderStep() {
   renderDots();
@@ -755,7 +813,10 @@ function renderDiscover(body) {
     ]);
   }
   if(step===3) {
-    const txid = 'ALGO'+Math.random().toString(36).substr(2,36).toUpperCase();
+    const txid = lastLiveEvaluation?.anchor?.txid || ('ALGO'+Math.random().toString(36).substr(2,36).toUpperCase());
+    const explorer = lastLiveEvaluation?.anchor?.explorer || null;
+    const consensus = lastLiveEvaluation?.verdict?.consensus || 'LOW';
+    const permitted = (lastLiveEvaluation?.verdict?.permitted ?? true);
     body.innerHTML = `<div class="anim-in">
       <div class="step-header">
         <div class="step-num">Step 3 · Agent Referral</div>
@@ -764,27 +825,28 @@ function renderDiscover(body) {
       <div class="verdict-box approved">
         <div class="verdict-icon">📨</div>
         <div class="verdict-title green">Referral sent to human</div>
-        <div class="verdict-sub green">tokenforge recommended · awaiting human decision</div>
+        <div class="verdict-sub green">consensus ${consensus} · permitted ${String(permitted)}</div>
       </div>
       <div class="code-block"><span class="k">"to"</span>:       <span class="s">"human_rafael"</span>,
 <span class="k">"from"</span>:     <span class="s">"agt_aurora_3f9a"</span>,
 <span class="k">"platform"</span>: <span class="s">"tokenforge"</span>,
 <span class="k">"action"</span>:   <span class="s">"invest €5,000 EURC"</span>,
-<span class="k">"score"</span>:    <span class="v">920</span>,
+<span class="k">"score"</span>:    <span class="v">${lastLiveEvaluation?.verdict?.score ?? 920}</span>,
+<span class="k">"consensus"</span>:<span class="v">"${consensus}"</span>,
 <span class="k">"status"</span>:   <span class="s">"awaiting_approval"</span></div>
       <div class="tx-box">
         <div class="tx-label">Algorand Anchor · Referral TX</div>
-        <div class="tx-hash">${txid.substr(0,28)}...</div>
-        <div class="tx-link">↗ AlgoExplorer Testnet</div>
+        <div class="tx-hash">${txid}</div>
+        <div class="tx-link">${explorer ? `<a href="${explorer}" target="_blank">↗ AlgoExplorer Testnet</a>` : 'Anchor unavailable (fund wallet for live txid)'}</div>
       </div>
       <div class="progress-wrap"><div class="progress-fill teal" id="prog3"></div></div>
     </div>`;
     setTimeout(()=>{const p=document.getElementById('prog3');if(p)p.style.width='100%';},100);
     queueLogs([
       ['agent','AGENT','preparing referral for human_rafael...','teal'],
-      ['agent','AGENT','attached: score 920 · MiCA proof · fee model','dim'],
+      ['agent','AGENT',`live verdict: ${consensus} · permitted ${String(permitted)}`,'dim'],
       ['tx','TX','anchoring referral on Algorand...','teal'],
-      ['tx','TX',`txID: ${txid.substr(0,20)}...`,'dim'],
+      ['tx','TX',`txID: ${txid}`,'dim'],
       ['ok','OK','referral anchored · awaiting human approval','green'],
     ]);
   }
