@@ -1,5 +1,3 @@
-const algosdk = require('algosdk');
-
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -7,12 +5,19 @@ module.exports = async function handler(req, res) {
     const address = process.env.ALGO_TESTNET_ADDR || process.env.ALGO_TESTNET_ADDRESS;
     if (!address) return res.status(500).json({ ok: false, error: 'ALGO_TESTNET_ADDR not configured' });
 
-    const algod = new algosdk.Algodv2({
-      token: process.env.ALGOD_TOKEN || '',
-      baseServer: process.env.ALGOD_URL || 'https://testnet-api.algonode.cloud'
+    const algodUrl = process.env.ALGOD_URL || 'https://testnet-api.algonode.cloud';
+    const token = process.env.ALGOD_TOKEN || '';
+
+    const r = await fetch(`${algodUrl}/v2/accounts/${address}`, {
+      headers: token ? { 'X-Algo-API-Token': token } : {}
     });
 
-    const account = await algod.accountInformation(address).do();
+    if (!r.ok) {
+      const body = await r.text();
+      return res.status(500).json({ ok: false, error: `algod ${r.status}: ${body.slice(0,200)}` });
+    }
+
+    const account = await r.json();
     const microAlgos = Number(account.amount || 0);
     const algo = microAlgos / 1e6;
 
