@@ -341,7 +341,7 @@ footer{background:var(--card);border-top:1px solid var(--border);padding:36px 0}
         <span class="pill pill-purple">Full Automation Mode</span>
         <span class="pill pill-green">Algorand On-Chain</span>
         <span class="pill pill-green">~3.6s Settlement</span>
-        <span class="pill pill-amber">MiCA · AML Ready</span>
+        <span class="pill pill-amber">MiCA-aligned · Audit pending</span>
         <span class="pill pill-amber">x402 Protocol</span>
       </div>
       <div class="hero-btns">
@@ -734,7 +734,7 @@ function renderDiscover(body) {
       </div>
       <ul class="check-list" id="cl1">
         <li id="c1-1">Scanning investment platforms...</li>
-        <li id="c1-2">Filtering: MiCA-compliant only</li>
+        <li id="c1-2">Filtering: MiCA-aligned · audit pending</li>
         <li id="c1-3">Match found: tokenforge (Score 920)</li>
       </ul>
     </div>`;
@@ -748,7 +748,7 @@ function renderDiscover(body) {
       ['agent','AGENT','agt_aurora_3f9a initialised','teal'],
       ['agent','AGENT','intent: Security Token Investment · €5,000','dim'],
       ['verun','VERUN','scanning platform registry...','purple'],
-      ['verun','VERUN','filter: MiCA-compliant · EU jurisdiction','dim'],
+      ['verun','VERUN','filter: MiCA-aligned · EU jurisdiction','dim'],
       ['ok','MATCH','tokenforge → score: 920 · VERIFIED','green'],
     ]);
   }
@@ -780,7 +780,7 @@ function renderDiscover(body) {
       ['verun','VERUN','Val-EU-01 → VERIFIED (eWpG confirmed)','dim'],
       ['verun','VERUN','Val-Neutral-02 → VERIFIED (AML clear)','dim'],
       ['verun','VERUN','Val-tokenforge → VERIFIED (self-attested)','dim'],
-      ['ok','OK','consensus 3/3 · score: 920 · MiCA compliant','green'],
+      ['ok','OK','consensus 3/3 · score: 920 · MiCA-aligned','green'],
     ]);
   }
   if(step===3) {
@@ -895,7 +895,7 @@ function renderSupervised(body) {
       ['human','HUMAN','approved: invest €5,000 EURC on tokenforge','amber'],
       ['tx','TX','anchoring approval on Algorand...','teal'],
       ['ok','OK','approval anchored · ~3.6s','green'],
-      ['ok','OK','transaction executed · MiCA audit trail complete','green'],
+      ['ok','OK','transaction executed · MiCA-aligned audit trail written','green'],
     ]);
   }
 }

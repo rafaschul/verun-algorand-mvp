@@ -232,7 +232,7 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
   <a class="nav-item" onclick="show('overview')" href="javascript:void(0)"><span class="nav-item-icon">📖</span> Overview</a>
   <a class="nav-item" onclick="show('architecture')" href="javascript:void(0)"><span class="nav-item-icon">🏗️</span> Architecture</a>
   <a class="nav-item" onclick="show('trust-gates')" href="javascript:void(0)"><span class="nav-item-icon">🔐</span> Trust Score Gates</a>
-  <a class="nav-item" onclick="show('mica')" href="javascript:void(0)"><span class="nav-item-icon">⚖️</span> MiCA Compliance</a>
+  <a class="nav-item" onclick="show('mica')" href="javascript:void(0)"><span class="nav-item-icon">⚖️</span> MiCA Alignment</a>
   <a class="nav-item" onclick="show('validators')" href="javascript:void(0)"><span class="nav-item-icon">🛡️</span> Validator Model</a>
   <div class="nav-group-label">API Reference</div>
   <a class="nav-item" onclick="show('api')" href="javascript:void(0)"><span class="nav-item-icon">⚡</span> Endpoints</a>
@@ -274,10 +274,10 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
     <span class="live-badge"><span class="live-dot"></span>LIVE on Algorand Testnet</span>
     &nbsp;&nbsp;<span style="font-size:12px;color:var(--text-muted)">Deployed April 2026 · 4 API Endpoints · v0.1.0</span>
   </p>
-  <p class="lead">Technical documentation for <strong>Verun Protocol</strong> — the MiCA-compliant AI Agent Trust Layer for regulated European finance, built on Algorand by <a href="https://www.bcpp.io" target="_blank">BCP Partners GmbH</a>.</p>
+  <p class="lead">Technical documentation for <strong>Verun Protocol</strong> — the MiCA-aligned AI Agent Trust Layer for regulated European finance, built on Algorand by <a href="https://www.bcpp.io" target="_blank">BCP Partners GmbH</a>.</p>
   <div class="hint info">
     🔐 <strong>"KYC for humans. KYA for agents. Both auditable on-chain."</strong><br>
-    Verun issues consensus-based Trust Scores (0–1000) that gate access to the tokenforge Chain API. Every evaluation is anchored as a Note Transaction on Algorand — immutable, auditable, MiCA Art. 75 compliant.
+    Verun issues consensus-based Trust Scores (0–1000) that gate access to the tokenforge Chain API. Every evaluation is anchored as a Note Transaction on Algorand — immutable, auditable — designed for MiCA Art. 75 alignment.
   </div>
   <div class="parts-grid">
     <a class="part-card" onclick="show('architecture')" href="javascript:void(0)">
@@ -426,12 +426,12 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
 
 <!-- MICA -->
 <div id="page-mica" style="display:none">
-  <h1>MiCA Compliance</h1>
-  <p class="lead">Verun is designed to satisfy MiCA obligations for AI agents acting as CASPs (Crypto-Asset Service Providers) in regulated European financial operations.</p>
-  <div class="hint info">⚖️ <strong>Scope:</strong> MiCA (Markets in Crypto-Assets Regulation) came into full effect December 2024 across all EU member states. Verun targets CASPs under Title V, with specific attention to Articles 67, 68, 72, and 75.</div>
-  <h2>Article Mapping</h2>
+  <h1>MiCA Alignment</h1>
+  <p class="lead">Verun is designed with MiCA obligations in mind for AI agents acting as CASPs in regulated European financial operations. Full compliance is subject to legal audit — planned Q3 2026.</p>
+  <div class="hint success">⚖️ <strong>Scope:</strong> MiCA (Markets in Crypto-Assets Regulation) came into full effect December 2024 across all EU member states. The features below are <strong>potential on-chain implementations</strong> designed to support MiCA alignment. They are not a legal compliance statement and have not yet been audited.</div>
+  <h2>Potential On-Chain Features per Article</h2>
   <table class="doc-table">
-    <thead><tr><th>Article</th><th>Requirement</th><th>Verun Implementation</th></tr></thead>
+    <thead><tr><th>Article</th><th>Requirement</th><th>Potential Verun Feature</th></tr></thead>
     <tbody>
       <tr>
         <td class="td-name">Art. 67</td>
@@ -455,7 +455,8 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
       </tr>
     </tbody>
   </table>
-  <div class="hint note">🔮 <strong>tokenforge alignment:</strong> tokenforge (TokenSuite) is eWpG-compliant, BaFin-relevant, and MiFID II-ready. The Verun × tokenforge integration inherits and extends this compliance stack for the agentic layer.</div>
+  <div class="hint note">🔮 <strong>tokenforge alignment:</strong> tokenforge (TokenSuite) is eWpG-compliant, BaFin-relevant, and MiFID II-ready. The Verun × tokenforge integration is designed to extend this compliance stack to the agentic layer — subject to legal review.</div>
+  <div class="hint info">📋 <strong>Legal audit status:</strong> MiCA compliance audit is planned for Q3 2026 as part of the Algorand Foundation grant milestones. Until then, all features on this page represent design intent, not verified compliance.</div>
   <div class="next-prev"><button class="next-btn" onclick="show('validators')"><div><span class="next-btn-lbl">Next</span>Validator Model →</div></button></div>
 </div>
 
