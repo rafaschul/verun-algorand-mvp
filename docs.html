@@ -232,7 +232,7 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
   <a class="nav-item" onclick="show('overview')" href="javascript:void(0)"><span class="nav-item-icon">📖</span> Overview</a>
   <a class="nav-item" onclick="show('architecture')" href="javascript:void(0)"><span class="nav-item-icon">🏗️</span> Architecture</a>
   <a class="nav-item" onclick="show('trust-gates')" href="javascript:void(0)"><span class="nav-item-icon">🔐</span> Trust Score Gates</a>
-  <a class="nav-item" onclick="show('mica')" href="javascript:void(0)"><span class="nav-item-icon">⚖️</span> MiCA Alignment</a>
+  <a class="nav-item" onclick="show('mica')" href="javascript:void(0)"><span class="nav-item-icon">⚖️</span> Potential MiCA Features</a>
   <a class="nav-item" onclick="show('validators')" href="javascript:void(0)"><span class="nav-item-icon">🛡️</span> Validator Model</a>
   <div class="nav-group-label">API Reference</div>
   <a class="nav-item" onclick="show('api')" href="javascript:void(0)"><span class="nav-item-icon">⚡</span> Endpoints</a>
@@ -274,10 +274,10 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
     <span class="live-badge"><span class="live-dot"></span>LIVE on Algorand Testnet</span>
     &nbsp;&nbsp;<span style="font-size:12px;color:var(--text-muted)">Deployed April 2026 · 4 API Endpoints · v0.1.0</span>
   </p>
-  <p class="lead">Technical documentation for <strong>Verun Protocol</strong> — the MiCA-aligned AI Agent Trust Layer for regulated European finance, built on Algorand by <a href="https://www.bcpp.io" target="_blank">BCP Partners GmbH</a>.</p>
+  <p class="lead">Technical documentation for <strong>Verun Protocol</strong> — the AI Agent Trust Layer with potential MiCA features for regulated European finance, built on Algorand by <a href="https://www.bcpp.io" target="_blank">BCP Partners GmbH</a>.</p>
   <div class="hint info">
     🔐 <strong>"KYC for humans. KYA for agents. Both auditable on-chain."</strong><br>
-    Verun issues consensus-based Trust Scores (0–1000) that gate access to the tokenforge Chain API. Every evaluation is anchored as a Note Transaction on Algorand — immutable, auditable — designed for MiCA Art. 75 alignment.
+    Verun issues consensus-based Trust Scores (0–1000) that gate access to the tokenforge Chain API. Every evaluation is anchored as a Note Transaction on Algorand — immutable, auditable. Potential on-chain MiCA features — to be checked and prior to legal audit.
   </div>
   <div class="parts-grid">
     <a class="part-card" onclick="show('architecture')" href="javascript:void(0)">
@@ -306,7 +306,7 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
   <h2>What is Verun?</h2>
   <p>As AI agents begin autonomously executing token transfers, minting securities, and placing investment orders, there is no existing standard for establishing <em>who</em> an agent is, whether it can be trusted, and whether it is permitted to act in a regulated context.</p>
   <p>Verun solves this with the <strong>Verun Accredited Agent Score (0–1000)</strong>: a consensus-based trust verdict issued by registered validators, anchored on Algorand for every evaluation, and enforced at the tokenforge Chain API gate.</p>
-  <div class="hint note">🔮 <strong>Regulatory context:</strong> Verun provides the machine-readable audit trail required by MiCA Art. 67, Art. 72, and Art. 75 for agents acting in regulated financial workflows. Verun does not build its own KYA — it aggregates existing compliance signals into a single, auditable verdict.</div>
+  <div class="hint note">🔮 <strong>Regulatory context:</strong> Verun is designed to generate the machine-readable audit trail relevant to MiCA Art. 67, Art. 72, and Art. 75 for agents acting in regulated financial workflows. These are potential on-chain features — not verified compliance. Verun aggregates existing compliance signals into a single, auditable verdict; legal audit planned Q3 2026.</div>
   <h2>Key Facts</h2>
   <table class="doc-table">
     <thead><tr><th>Property</th><th>Value</th></tr></thead>
@@ -421,13 +421,13 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
       <tr><td class="td-name" style="color:#6b7280!important">BLOCK</td><td>0 – 299</td><td>None — access denied</td><td>0%</td></tr>
     </tbody>
   </table>
-  <div class="next-prev"><button class="next-btn" onclick="show('mica')"><div><span class="next-btn-lbl">Next</span>MiCA Compliance →</div></button></div>
+  <div class="next-prev"><button class="next-btn" onclick="show('mica')"><div><span class="next-btn-lbl">Next</span>Potential MiCA Features →</div></button></div>
 </div>
 
 <!-- MICA -->
 <div id="page-mica" style="display:none">
-  <h1>MiCA Alignment</h1>
-  <p class="lead">Verun is designed with MiCA obligations in mind for AI agents acting as CASPs in regulated European financial operations. Full compliance is subject to legal audit — planned Q3 2026.</p>
+  <h1>Potential On-Chain MiCA Features</h1>
+  <p class="lead">Verun is designed with MiCA obligations in mind for AI agents acting in regulated European financial operations. The features below are <strong>potential on-chain implementations</strong> — to be checked and prior to legal audit. Not a compliance statement.</p>
   <div class="hint success">⚖️ <strong>Scope:</strong> MiCA (Markets in Crypto-Assets Regulation) came into full effect December 2024 across all EU member states. The features below are <strong>potential on-chain implementations</strong> designed to support MiCA alignment. They are not a legal compliance statement and have not yet been audited.</div>
   <h2>Potential On-Chain Features per Article</h2>
   <table class="doc-table">
@@ -468,7 +468,7 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
   <div class="v-grid">
     <div class="v-card">
       <div class="v-card-title">BCP Partners GmbH</div>
-      <div class="v-card-body">Founding Validator. MiCA compliance node operated by BCP Partners. Enforces Verun score tiers and operation gates. EU-regulated. Contact: <a href="https://www.bcpp.io" target="_blank">bcpp.io</a></div>
+      <div class="v-card-body">Founding Validator. Score-based consensus node operated by BCP Partners. Enforces Verun score tiers and operation gates. EU-based. Contact: <a href="https://www.bcpp.io" target="_blank">bcpp.io</a></div>
       <span class="v-badge">Founding · Active</span>
     </div>
     <div class="v-card">
@@ -687,7 +687,7 @@ https://testnet.algoexplorer.io/tx/KBGSXMRXSM6P75RB6XHYT3RY6JNK7IGY6KIXWGXTVLRUE
 <!-- ROADMAP -->
 <div id="page-roadmap" style="display:none">
   <h1>Mainnet Roadmap</h1>
-  <p class="lead">From Algorand Testnet MVP to MiCA-compliant production infrastructure.</p>
+  <p class="lead">From Algorand Testnet MVP to production infrastructure with legal-audited MiCA alignment.</p>
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-left">
