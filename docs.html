@@ -247,6 +247,8 @@ body.dark .live-badge{background:rgba(22,163,74,0.12);color:#4ade80;border-color
   <a class="nav-item" onclick="show('sbt')" href="javascript:void(0)"><span class="nav-item-icon">🪙</span> Soulbound Token (SBT)</a>
   <div class="nav-group-label">Technical Reference</div>
   <a class="nav-item" onclick="show('x402')" href="javascript:void(0)"><span class="nav-item-icon">🔄</span> x402 Sequence Diagram</a>
+  <div class="nav-group-label">Integration</div>
+  <a class="nav-item" onclick="show('agents')" href="javascript:void(0)"><span class="nav-item-icon">🤖</span> For Agents</a>
   <div class="nav-group-label">Roadmap</div>
   <a class="nav-item" onclick="show('roadmap')" href="javascript:void(0)"><span class="nav-item-icon">🗺️</span> Mainnet Roadmap</a>
   <div class="nav-divider"></div>
@@ -759,6 +761,82 @@ https://testnet.algoexplorer.io/tx/KBGSXMRXSM6P75RB6XHYT3RY6JNK7IGY6KIXWGXTVLRUE
   </div>
 </div>
 
+<!-- FOR AGENTS -->
+<div id="page-agents" style="display:none">
+  <h1>For Agents</h1>
+  <p class="lead">Everything an AI agent needs to connect to Verun Network and get a trust verdict on Algorand — in under 60 seconds.</p>
+
+  <div class="hint success">🤖 <strong>Any agent works.</strong> Claude, GPT, Gemini, open-source — if it can make an HTTP POST, it can use Verun.</div>
+
+  <h2>Step 1 — Add the System Prompt</h2>
+  <p>Paste this into your agent's system instructions. It tells the agent when and how to call Verun before executing any financial operation.</p>
+
+  <div style="background:var(--code-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:20px 0">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border)">
+      <span style="font-size:11px;font-weight:600;color:var(--text-muted);font-family:var(--mono)">verun · agent system prompt</span>
+      <button onclick="copyDocPrompt(this)" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:5px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;font-family:var(--font)">Copy</button>
+    </div>
+    <pre id="doc-agent-prompt" style="margin:0;padding:18px 20px;font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--text-secondary);white-space:pre-wrap;word-break:break-word">You are an AI agent operating within the Verun Network trust framework on Algorand.
+
+Before executing any financial operation, request a Verun trust evaluation.
+
+== HOW TO EVALUATE ==
+POST https://verun-algorand-mvp.vercel.app/api/evaluate
+Body: { "agentId": "YOUR_AGENT_ID", "score": YOUR_SCORE, "operation": "transfer" }
+
+== OPERATION GATES ==
+read        → score 300+
+transfer    → score 500+
+order       → score 600+
+
+== VERDICT RULES ==
+permitted: true   → proceed with the operation
+permitted: false  → stop, escalate to human supervisor
+Always store the returned txid as your on-chain audit trail.
+
+== HUMAN ESCALATION ==
+If verdict is denied or pending, notify the human supervisor.
+Never execute financial operations without a valid Verun verdict.
+
+Network: Algorand Testnet
+Validators: tokenforge · BCP Partners
+Docs: https://verun-algorand-mvp.vercel.app/docs.html</pre>
+  </div>
+
+  <h2>Step 2 — Make the API Call</h2>
+  <p>Your agent calls <code>/api/evaluate</code> before any operation. Replace <code>YOUR_AGENT_ID</code> with your agent's identifier.</p>
+  <div class="code-block"><span class="k">curl</span> -X POST https://verun-algorand-mvp.vercel.app/api/evaluate \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"agentId":"agt_my_agent","score":820,"operation":"transfer"}'</span></div>
+
+  <h2>Step 3 — Read the Verdict</h2>
+  <p>Verun returns a verdict with an Algorand TXID as immutable proof.</p>
+  <div class="code-block">{
+  <span class="k">"permitted"</span>: <span class="v">true</span>,
+  <span class="k">"consensus"</span>: <span class="s">"LOW"</span>,
+  <span class="k">"operation"</span>: <span class="s">"transfer"</span>,
+  <span class="k">"score"</span>: <span class="v">820</span>,
+  <span class="k">"txid"</span>: <span class="s">"ALGO_TESTNET_TXID"</span>,
+  <span class="k">"anchor"</span>: { <span class="k">"status"</span>: <span class="s">"anchored"</span>, <span class="k">"round"</span>: <span class="v">12345678</span> }
+}</div>
+
+  <div class="hint note">🔗 <strong>On-chain proof:</strong> every <code>txid</code> is verifiable at <a href="https://testnet.algoexplorer.io" target="_blank">testnet.algoexplorer.io</a> — immutable, timestamped, auditable.</div>
+
+  <h2>Operation Reference</h2>
+  <table class="api-table">
+    <thead><tr><th>operation</th><th>Min. Score</th><th>Use case</th></tr></thead>
+    <tbody>
+      <tr><td><code>read</code></td><td>300+</td><td>Query platform data, price feeds</td></tr>
+      <tr><td><code>transfer</code></td><td>500+</td><td>Send tokens, initiate payments</td></tr>
+      <tr><td><code>order</code></td><td>600+</td><td>Place trade orders, mint tokens</td></tr>
+    </tbody>
+  </table>
+
+  <div class="hint info">📋 <strong>AGENT.md</strong> — the full machine-readable version of this prompt lives in the <a href="https://github.com/rafaschul/verun-algorand-mvp/blob/main/AGENT.md" target="_blank">GitHub repo</a> for direct agent ingestion.</div>
+
+  <div class="next-prev"><button class="next-btn" onclick="show('roadmap')"><div><span class="next-btn-lbl">Next</span>Mainnet Roadmap →</div></button></div>
+</div>
+
 <!-- X402 SEQUENCE DIAGRAM -->
 <div id="page-x402" style="display:none">
   <h1>x402 Sequence Diagram — Algorand</h1>
@@ -1073,7 +1151,7 @@ https://testnet.algoexplorer.io/tx/KBGSXMRXSM6P75RB6XHYT3RY6JNK7IGY6KIXWGXTVLRUE
 
 <script>
 // Page switching
-const pages = ['welcome','overview','architecture','trust-gates','mica','validators','api','anchor','sbt','x402','roadmap'];
+const pages = ['welcome','overview','architecture','trust-gates','mica','validators','api','anchor','sbt','x402','agents','roadmap'];
 function show(id) {
   pages.forEach(p => {
     const el = document.getElementById('page-' + p);
@@ -1144,6 +1222,14 @@ document.addEventListener('DOMContentLoaded', () => {
   hljs.highlightAll();
   buildToc();
 });
+
+function copyDocPrompt(btn) {
+  const text = document.getElementById('doc-agent-prompt').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+  });
+}
 </script>
 </body>
 </html>
