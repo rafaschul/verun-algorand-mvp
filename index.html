@@ -436,8 +436,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 0}
     </div>
 
     <div class="mode-tabs">
-      <button class="mode-tab active" id="tab-discover" onclick="setMode('discover')">🔍 Discovery</button>
-      <button class="mode-tab" id="tab-supervised" onclick="setMode('supervised')">👤 Supervised</button>
+      <button class="mode-tab" id="tab-discover" onclick="setMode('discover')">🔍 Discovery</button>
+      <button class="mode-tab active" id="tab-supervised" onclick="setMode('supervised')">👤 Supervised</button>
       <button class="mode-tab auto-tab" id="tab-auto" onclick="setMode('auto')">⚡ Autonomous</button>
     </div>
 
@@ -562,7 +562,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 0}
 
 <script>
 // ─── STATE ──────────────────────────────────────────────
-let currentMode = 'discover';
+let currentMode = 'supervised';
 let currentStep = 1;
 let logTimer = null;
 let lastLiveEvaluation = null;
@@ -708,7 +708,7 @@ async function runLiveDemo() {
       <div><strong>Anchor:</strong> ${tx ? `<a href="${anchor.explorer}" target="_blank">${tx}</a>` : `not anchored (${anchor.status || 'unknown'})`}</div>
     `;
 
-    setMode('discover');
+    setMode('supervised');
     currentStep = 3;
     renderStep();
   } catch (e) {
