@@ -331,7 +331,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 0}
 <nav class="nav">
   <div class="nav-logo">Verun <span class="tag">NETWORK</span></div>
   <div class="nav-links">
-    <a href="#demo">Demo</a>
+    <a href="javascript:void(0)" onclick="scrollToDemo()">Demo</a>
     <a href="#platforms">Platforms</a>
     <a href="/docs.html" target="_blank">Tech Docs</a>
   </div>
@@ -351,7 +351,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 0}
         <h1>The Trust Layer<br>for Agentic Finance.</h1>
         <p class="hero-sub">Make your AI agent <strong>regulatory-ready</strong>.</p>
         <div class="hero-btns">
-          <button class="btn btn-teal" onclick="runLiveDemo()">Run Demo →</button>
+          <button class="btn btn-teal" onclick="scrollToDemo()">Run Demo →</button>
           <a href="/docs.html" target="_blank" class="btn btn-outline">View Docs</a>
         </div>
       </div>
@@ -546,7 +546,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 0}
         <div style="font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono)">© 2026 BCP Partners GmbH · All rights reserved</div>
       </div>
       <div class="footer-links">
-        <a href="#demo">Demo</a>
+        <a href="javascript:void(0)" onclick="scrollToDemo()">Demo</a>
         <a href="#platforms">Platforms</a>
         <a href="https://github.com/rafaschul/verun-algorand-mvp" target="_blank">GitHub</a>
         <a href="/docs.html" target="_blank">Tech Docs</a>
@@ -665,6 +665,14 @@ function setMode(mode) {
   document.getElementById('terminal-body').innerHTML = '';
   renderStep();
   addLog('agent','AGENT',`Mode: ${mode.toUpperCase()}`, mode==='auto'?'purple':'teal');
+}
+
+function scrollToDemo() {
+  const panel = document.getElementById('step-panel');
+  if (!panel) return;
+  const navH = document.querySelector('.nav')?.offsetHeight || 62;
+  const top = panel.getBoundingClientRect().top + window.scrollY - navH - 12;
+  window.scrollTo({ top, behavior: 'smooth' });
 }
 
 async function runLiveDemo() {
