@@ -455,6 +455,51 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 0}
   </div>
 </section>
 
+<!-- AGENT QUICKSTART -->
+<section class="section" id="quickstart" style="background:var(--bg)">
+  <div class="container">
+    <div class="section-label">Agent Quickstart</div>
+    <h2 class="section-h2">Get your agent Verun-ready.</h2>
+    <p class="section-sub" style="margin-bottom:32px">Paste this into your agent's system instructions. It connects any AI agent to the Verun Network in under 60 seconds.</p>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;max-width:780px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--card)">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:10px;height:10px;border-radius:50%;background:#FF5F57;display:inline-block"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#FEBC2E;display:inline-block"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#28C840;display:inline-block"></span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:6px">verun · agent system prompt</span>
+        </div>
+        <button onclick="copyAgentPrompt()" id="copy-btn" style="font-family:var(--sans);font-size:11px;font-weight:700;padding:5px 14px;border-radius:6px;border:1px solid var(--teal-border);background:var(--teal-dim);color:var(--teal);cursor:pointer;transition:all .15s">Copy Prompt</button>
+      </div>
+      <pre id="agent-prompt-text" style="margin:0;padding:20px 22px;font-family:var(--mono);font-size:12px;line-height:1.75;color:var(--text2);white-space:pre-wrap;word-break:break-word;overflow-x:auto">You are an AI agent operating within the Verun Network trust framework on Algorand.
+
+Before executing any financial operation, request a Verun trust evaluation.
+
+== HOW TO EVALUATE ==
+POST https://verun-algorand-mvp.vercel.app/api/evaluate
+Body: { "agentId": "YOUR_AGENT_ID", "score": YOUR_SCORE, "operation": "transfer" }
+
+== OPERATION GATES ==
+read        → score 300+
+transfer    → score 500+
+order       → score 600+
+
+== VERDICT RULES ==
+permitted: true   → proceed with the operation
+permitted: false  → stop, escalate to human supervisor
+Always store the returned txid as your on-chain audit trail.
+
+== HUMAN ESCALATION ==
+If verdict is denied or pending, notify the human supervisor.
+Never execute financial operations without a valid Verun verdict.
+
+Network: Algorand Testnet
+Validators: tokenforge · BCP Partners
+Docs: https://verun-algorand-mvp.vercel.app/docs.html</pre>
+    </div>
+  </div>
+</section>
+
 <!-- PLATFORM REGISTRY -->
 <section class="section platform-section" id="platforms">
   <div class="container">
@@ -665,6 +710,21 @@ function setMode(mode) {
   document.getElementById('terminal-body').innerHTML = '';
   renderStep();
   addLog('agent','AGENT',`Mode: ${mode.toUpperCase()}`, mode==='auto'?'purple':'teal');
+}
+
+function copyAgentPrompt() {
+  const text = document.getElementById('agent-prompt-text').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied!';
+    btn.style.background = 'var(--teal)';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.textContent = 'Copy Prompt';
+      btn.style.background = 'var(--teal-dim)';
+      btn.style.color = 'var(--teal)';
+    }, 2000);
+  });
 }
 
 function scrollToDemo() {
