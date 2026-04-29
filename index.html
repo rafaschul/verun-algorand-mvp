@@ -217,7 +217,7 @@ a{color:var(--teal);text-decoration:none}
 .ha-btn.deny{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,106,0.3)}
 .ha-btn.deny:hover{background:rgba(255,77,106,0.2)}
 
-.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+.step-nav{display:flex;justify-content:space-between;align-items:center}
 .nav-btn{font-family:var(--sans);font-size:12px;font-weight:600;padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.2s}
 .nav-btn:hover:not(:disabled){border-color:var(--teal);color:var(--teal)}
 .nav-btn:disabled{opacity:0.3;cursor:not-allowed}
@@ -441,17 +441,15 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 0}
       <button class="mode-tab auto-tab" id="tab-auto" onclick="setMode('auto')">⚡ Autonomous</button>
     </div>
 
-    <div id="live-demo-result" style="max-width:900px;margin:16px auto 0;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--text2);display:none"></div>
-
     <div class="demo-layout">
       <div class="step-panel" id="step-panel">
-        <div class="step-dots" id="step-dots"></div>
-        <div id="stage-body" class="stage-body"></div>
-        <div class="step-nav">
+        <div class="step-nav" style="margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--border);border-top:none;margin-top:0;padding-top:0">
           <button class="nav-btn" id="btn-prev" onclick="prevStep()" disabled>← Back</button>
           <span class="step-counter" id="step-counter"></span>
           <button class="nav-btn primary" id="btn-next" onclick="nextStep()">Next →</button>
         </div>
+        <div class="step-dots" id="step-dots"></div>
+        <div id="stage-body" class="stage-body"></div>
       </div>
     </div>
   </div>
@@ -671,9 +669,7 @@ function setMode(mode) {
 
 async function runLiveDemo() {
   window.location.hash = '#demo';
-  const panel = document.getElementById('live-demo-result');
-  panel.style.display = 'block';
-  panel.innerHTML = '⏳ Calling <code>/api/evaluate</code> with live payload...';
+  const panel = null; // live-demo-result removed
 
   document.getElementById('terminal-body').innerHTML = '';
   addLog('agent','AGENT','Running live evaluate call...','teal');
@@ -699,21 +695,11 @@ async function runLiveDemo() {
       addLog('warn','WARN',`anchor: ${anchor.status || 'unavailable'} ${anchor.error ? `(${anchor.error})` : ''}`,'amber');
     }
 
-    panel.innerHTML = `
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
-        <span class="pill pill-${verdict.permitted ? 'green' : 'amber'}">permitted: ${String(verdict.permitted)}</span>
-        <span class="pill pill-${verdict.consensus === 'LOW' ? 'green' : 'amber'}">consensus: ${verdict.consensus || 'n/a'}</span>
-        <span class="pill pill-teal">operation: ${verdict.operation || 'n/a'}</span>
-      </div>
-      <div><strong>Anchor:</strong> ${tx ? `<a href="${anchor.explorer}" target="_blank">${tx}</a>` : `not anchored (${anchor.status || 'unknown'})`}</div>
-    `;
-
     setMode('supervised');
     currentStep = 3;
     renderStep();
   } catch (e) {
     addLog('warn','WARN',`live call failed: ${e.message}`,'amber');
-    panel.innerHTML = `❌ Live demo failed: ${e.message}`;
   }
 }
 
